@@ -1,0 +1,65 @@
+@page=1
+@limit=5
+@searchTerm=^paris
+
+### get plural with pagination
+GET http://{{host}}/communes
+    ?_page={{page}}
+    &_limit={{limit}}
+
+### get plural with sorting
+GET http://{{host}}/communes
+    ?_sort=value
+    &_order=desc
+    &_limit={{limit}}
+
+### search term
+# @name search
+GET http://{{host}}/communes
+    ?value_like={{searchTerm}}
+
+### get 1st result from search
+GET http://{{host}}/communes/{{search.response.body.$[0].id}}
+
+### create new entry
+# @name creation
+POST http://{{host}}/communes
+Content-Type: application/json
+
+{
+  "culture": "fr-FR",
+  "objectType": "Commune",
+  "objectId": "666",
+  "propertyName": "Label",
+  "value": "Pandemonium"
+}
+
+### create new entry from file
+# @name creation
+POST http://{{host}}/communes
+Content-Type: application/json
+
+< ./samples/commune.json
+
+
+### get newly created entry
+GET http://{{host}}/communes/{{creation.response.body.id}}
+
+### update newly created entry
+# @name update
+PUT http://{{host}}/communes/{{creation.response.body.id}}
+Content-Type: application/json
+
+{
+  "culture": "fr-FR",
+  "objectType": "Commune",
+  "objectId": "666",
+  "propertyName": "Label",
+  "value": "Lamorlaye"
+}
+
+### get updated entry
+GET http://{{host}}/communes/{{update.response.body.id}}
+
+### delete newly created & updated entry
+DELETE http://{{host}}/communes/{{update.response.body.id}}
